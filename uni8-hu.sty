@@ -35,6 +35,9 @@
 \def\@univ@font@tg{% TeX Gyre fonts, great alternative for Times, Helvetica and Courier.
   % Also changes math fonts. Load before tgtermes so that tgtermes can
   % change text fonts back.
+  %
+  % TODO(pts): Better with newtxtext and newtxmath?
+  % https://tex.stackexchange.com/q/469726/820
   \RequirePackage{mathptmx}
   \RequirePackage{tgtermes}
   \RequirePackage{tgheros}
