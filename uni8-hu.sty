@@ -1,0 +1,65 @@
+% by pts@fazekas.hu at Fri Jan 11 15:48:05 CET 2019
+%
+% It mandates UTF-8 input encoding and T1 font encoding.
+% It works with pdflatex and lualatex.
+% It works with hyperref.sty.
+% It works with color.sty and xcolor.sty.
+% It defines \ul for underlining text.
+% It selects the default fonts with [font=...] options.
+\ProvidesPackage{uni8-hu}[2019/01/01 v0.01 Universal Hungarian UTF-8 style]
+\def\@univ@font{cm}
+\DeclareOption{font=cm}{\def\@univ@font{cm}}  % Preferred.
+\DeclareOption{font=lm}{\def\@univ@font{cm}}
+\DeclareOption{font=ec}{\def\@univ@font{cm}}
+\DeclareOption{font=lmodern}{\def\@univ@font{cm}}
+\DeclareOption{font=tg}{\def\@univ@font{tg}}
+\DeclareOption{font=times}{\def\@univ@font{tg}}  % Preferred.
+\DeclareOption{font=old-times}{\def\@univ@font{oldtimes}}  % Preferred.
+\DeclareOption{font=oldtimes}{\def\@univ@font{oldtimes}}
+\DeclareOption{nop}{}
+\ProcessOptions\relax
+%
+\ifx\luatexversion\@undefined
+  % luainputenc would also work, but we don't want to depend on it.
+  \RequirePackage[utf8]{inputenc}
+\else
+  % Needed for ő and ű in non-fontspec fonts.
+  \RequirePackage[utf8]{luainputenc}
+\fi
+\RequirePackage{t1enc}
+% TODO(pts): Add [font=tnr] for Times New Roman, Helvetica, Courier New.
+% TODO(pts): Add [fontspec] option for all fonts (cm, tg, tnr, old-times), only used in lualatex.
+\def\@univ@font@cm{%  Latin Modern fonts, bettern than CM and EC for international text in T1 encoding.
+  \RequirePackage{lmodern}
+}
+\def\@univ@font@tg{% TeX Gyre fonts, great alternative for Times, Helvetica and Courier.
+  % Also changes math fonts. Load before tgtermes so that tgtermes can
+  % change text fonts back.
+  \RequirePackage{mathptmx}
+  \RequirePackage{tgtermes}
+  \RequirePackage{tgheros}
+  \RequirePackage{tgcursor}
+}
+\def\@univ@font@oldtimes{% Times, Helvetica and Courier.
+  % Ugly spacing of the accent in \H{o}. Use [font=tg] instead.
+  %
+  % Doesn't affect math fonts.
+  %\RequirePackage{times}
+  % Also changes math fonts.
+  \RequirePackage{mathptmx}
+  % TODO(pts): Check txfonts.sty aand https://ctan.org/pkg/newtx as well.
+  % TODO(pts): With fontspec, use https://ctan.org/pkg/tex-gyre-math?lang=en with
+  %            unicode-math.
+}
+\csname @univ@font@\@univ@font\endcsname
+%
+% hungarian is the default.
+% Without this, \l@hungarian wouldn't be defined in lualatex.
+\usepackage[english,hungarian]{babel}
+% Override magyar.ldf to prevent warning about \usepackage[...]{inputenc}.
+\def\magyar@sugg@ie#1{}
+% For non-utf8 input encodings, use \usepackage{soul}.
+\RequirePackage{soulutf8}
+\def\underline{\ul}  % \underline is built-in. Let's use soul's.
+\def\uline{\ul}  % \uline is from ulem. Let's use soul's.
+\endinput
