@@ -6,7 +6,7 @@
 % It works with color.sty and xcolor.sty.
 % It defines \ul for underlining text.
 % It selects the default fonts with [font=...] options.
-\ProvidesPackage{uni8-hu}[2019/01/01 v0.01 Universal LaTeX inputenc and fontenc]
+\ProvidesPackage{uni8}[2019/01/02 v0.02 Universal LaTeX inputenc and fontenc]
 
 % Extra customization from .tex: \PassOptionsToPackage{hungarian}{babel}
 %
@@ -86,12 +86,13 @@
 %
 % This magic is based on https://tex.stackexchange.com/a/469909/820
 \let\kanjiskip\hsize
-% hungarian is the default.
 % Without this, hyphenation \language macros such as \l@english and
 % \l@hungarian wouldn't be defined in lualatex.
 %\edef\reserved@a{\csname opt@babel.sty\endcsname}
 \expandafter\ifx\csname opt@babel.sty\endcsname\relax
-  \expandafter\def\csname opt@babel.sty\endcsname{english,hungarian}\fi
+  % english is the default language (including default hyphenation) if
+  % \PassOptionsToPackage{...}{babel} was not specified.
+  \expandafter\def\csname opt@babel.sty\endcsname{english}\fi
 \RequirePackage{babel}
 \let\kanjkiskip\@undefined  % Undo our hack above.
 % Override magyar.ldf to prevent warning about \usepackage[...]{inputenc}.
