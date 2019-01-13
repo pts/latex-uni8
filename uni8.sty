@@ -67,17 +67,26 @@
       {[fontspec] conflicts with [inputenc=\@univ@inputenc].\MessageBreak
        Use [inputenc=utf8] with [fontspec]}{}\@@end}
   \def\reserved@a{cm}%
-  % TODO(pts): Make it work with [font=times] as well.
-  \ifx\@univ@font\reserved@a\else\PackageError{uni8}
-      {[fontspec] conflicts with [font=\@univ@font].\MessageBreak
-       Use [font=cm] with [fontspec]}{}
-    \def\@univ@font{cm}%
-  \fi
   \RequirePackage{babel}
   \RequirePackage{fontspec}  % lmodern font is the default for fontspec.
   % Override magyar.ldf loaded by babel.sty to prevent useless warning about
   % \usepackage{t1enc}.
   \def\magyar@sugg@to#1{}
+
+  \def\@univ@font@cm{%  Latin Modern fonts, bettern than CM and EC for international text in T1 encoding.
+    % TODO(pts): Add the default explicitly here.
+  }
+  \def\@univ@font@times{% TeX Gyre fonts, great alternative for Times, Helvetica and Courier.
+    \usepackage{unicode-math}
+    \setmainfont{TeX Gyre Termes}
+    \setsansfont{TeX Gyre Heros}[Scale=MatchLowercase]
+    \setmonofont{TeX Gyre Cursor}[Scale=MatchLowercase]
+    \setmathfont{TeX Gyre Termes Math}
+  }
+  \def\@univ@font@oldtimes{% Times, Helvetica and Courier.
+    \@univ@font@times  % old-times is not available in Unicode, using times.
+  }
+  \csname @univ@font@\@univ@font\endcsname
 \else
   \ifx\luatexversion\@undefined
     % luainputenc would also work, but we don't want to depend on it, to
@@ -116,8 +125,6 @@
     % Also changes math fonts.
     \RequirePackage{mathptmx}
     % TODO(pts): Check txfonts.sty aand https://ctan.org/pkg/newtx as well.
-    % TODO(pts): With fontspec, use https://ctan.org/pkg/tex-gyre-math?lang=en with
-    %            unicode-math.
   }
   \csname @univ@font@\@univ@font\endcsname
 

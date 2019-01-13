@@ -1,0 +1,27 @@
+% -*- coding: utf-8 -*-
+% example_fut.tex, works with modern lualatex in TeX Live 2019.
+% The input encoding is UTF-8 (utf8).
+\documentclass{article}
+\PassOptionsToPackage{hungarian}{babel}
+\usepackage[fontspec,font=times]{uni8}
+\begin{document}
+% Alternatively, this works in lualatex: \language99 \patterns{ő9y}
+\hyphenation{yő-yő-yő-yő-yő-yő-yő}
+\showhyphens{yőyőyőyőyőyőyő}
+\showhyphens{árvíztűrő tükörfúrógép}
+\hrule width \hsize
+\bigskip
+\vbox{\Huge\hsize7em\hrule\noindent . . . . . bababababababa\hrule}
+\bigskip
+\vbox{\Huge\hsize7em\hrule\noindent . . . . . bábábábábábábá\hrule}
+\bigskip
+\vbox{\Huge\hsize7em\hrule\noindent . . . . . bőbőbőbőbőbőbő\hrule}
+\bigskip
+\vbox{\Huge\hsize7em\hrule\noindent . . . . . yőyőyőyőyőyőyő\hrule}
+\bigskip
+\vbox{\Huge\hsize9em\hrule\noindent$\sin^2\alpha+\cos^2\alpha=1$\hrule}
+\bigskip
+\vbox{\Huge\hsize7em\hrule\noindent Hel\texttt{lo}, \textsf{Wörld!}\hrule}
+\bigskip
+\vfill\hrule width\hsize
+\end{document}

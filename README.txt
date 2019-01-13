@@ -25,9 +25,12 @@ Limitations:
 
 uni8.sty takes care of the following:
 
-* \usepackage[utf8]{inputenc} (or a variation of it).
-* It sets up font encoding (like T1 encoding with \usepackage{t1enc} if
-  needed).
+* It sets up font families (text: main, sans and mono; also math): Computer
+  Modern (implemented using Latin Modern) by default, and it's possible to
+  select Times + Helvetica + Courier (implemented using TeX Gyre and mathptmx)
+  instead.
+* It sets up input encoding (UTF-8 is the default, it does
+  \usepackage[utf8]{inputenc} or a variation of that).
 * \usepackage[english]{babel} (this includes setting up hyphenation).
   If you want a different language, then do someting like
   \PassOptionsToPackage{hungarian}{babel} before \usepackage{uni8}.
@@ -39,6 +42,8 @@ uni8.sty takes care of the following:
   by default). (For lualatex, it also makes \patterns{...} work similarly.)
 * It makes sure that magyar.ldf (if \PassOptionsToPackage{hungarian}{babel}
   is used) doesn't print useless warnings about inputenc.sty or t1enc.sty.
+* It sets up font encoding (like T1 encoding with \usepackage{t1enc} if
+  needed).
 
 Usage recommendations and best practices:
 
@@ -55,9 +60,10 @@ Usage recommendations and best practices:
 
 Features:
 
-* Use \usepackage[font=times] to use Times, Helvetica and Courier as default
-  text and math fonts (rather than Latin Modern, which is based on Computer
-  Modern). This uses the new Tex Gyre text fonts.
+* The default font (\usepackage[font=cm]) families are Computer Modern
+  (implemented using Latin Modern) by default.
+* Use \usepackage[font=times] to use Times, Helvetica and Courier font
+  families (implemented using TeX Gyre and mathptmx).
 * Use \usepackage[font=old-times] to use Times, Helvetica and Courier as
   text and math default fonts (rather than Latin Modern, which is based on
   Computer Modern). This uses the new old URW-based text fonts with
@@ -69,16 +75,18 @@ Features:
 * uni8.sty works with hyperref.sty, color.sty and xcolor.sty in both
   pdflatex and lualatex.
 
-How to install LaTeX on Debian:
+How to install LaTeX on Debian Buster, with TeX Live 2019:
 
-* To get the pdflatex command for TeX Live 2019 on Debian, run:
+* To get the pdflatex command, run:
   sudo apt-get install texlive-latex-base
 * To get the lualatex command (and the minimal defaults for uni8.sty), run:
   sudo apt-get install texlive-latex-base texlive-luatex
 * To make [fontspec] (eqivalent to \usepackage{fontspec}) work, run:
   sudo apt-get install texlive-latex-base texlive-luatex texlive-latex-recommended
-* To make [font=tg] work, run:
-  sudo apt-get install texlive-latex-base texlive-luatex texlive-latex-recommended
+* To make [font=times] work without [fontspec], run:
+  sudo apt-get install texlive-latex-base texlive-latex-recommended tex-gyre
+* To make [font=times] work with [fontspec], run:
+  sudo apt-get install texlive-latex-base texlive-luatex fonts-texgyre texlive-latex-recommended
 * To make \usepackage{soul} (automatically done by uni8.sty) work, run:
   sudo apt-get install texlive-latex-base texlive-latex-extra
 * To make \usepackage{lmodern} (automatically done by uni8.sty) work, run:
