@@ -5,6 +5,9 @@
 \PassOptionsToPackage{hungarian}{babel}
 \usepackage{uni8}
 \begin{document}
+% Alternatively, this works in lualatex: \language99 \patterns{ő9y}
+\hyphenation{yő-yő-yő-yő-yő-yő-yő}
+\showhyphens{yőyőyőyőyőyőyő}
 \showhyphens{árvíztűrő tükörfúrógép}
 \hrule width \hsize
 \bigskip
@@ -13,6 +16,8 @@
 \vbox{\Huge\hsize7em\hrule\noindent . . . . . bábábábábábábá\hrule}
 \bigskip
 \vbox{\Huge\hsize7em\hrule\noindent . . . . . bőbőbőbőbőbőbő\hrule}
+\bigskip
+\vbox{\Huge\hsize7em\hrule\noindent . . . . . yőyőyőyőyőyőyő\hrule}
 \bigskip
 \vfill\hrule width\hsize
 \end{document}

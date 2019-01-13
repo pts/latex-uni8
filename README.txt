@@ -37,6 +37,9 @@ uni8.sty takes care of the following:
 * \usepackage{soul} (or a variation of it, if available).
 * It makes the \ul command (as defined in soul.sty) should just work with
   footnotes and automatic hyphenation as well.
+* It makes \hyphenation{...} exceptions work properly, even with accented
+  characters specified usually, encoded with the input encoding (UTF-8
+  by default). (For lualatex, it makes \patterns{...} work similarly.)
 
 Usage recommendations and best practices:
 
