@@ -7,7 +7,9 @@
 % It defines \ul for underlining text.
 % It selects the default fonts with [font=...] options.
 \ProvidesPackage{uni8-hu}[2019/01/01 v0.01 Universal Hungarian UTF-8 style]
+
 \def\@univ@font{cm}
+\def\@univ@inputenc{utf8}
 \DeclareOption{font=cm}{\def\@univ@font{cm}}  % Preferred.
 \DeclareOption{font=lm}{\def\@univ@font{cm}}
 \DeclareOption{font=ec}{\def\@univ@font{cm}}
@@ -18,15 +20,21 @@
 \DeclareOption{font=oldtimes}{\def\@univ@font{oldtimes}}
 \DeclareOption{nop}{}
 \ProcessOptions\relax
-%
+
 \ifx\luatexversion\@undefined
-  % luainputenc would also work, but we don't want to depend on it.
-  \RequirePackage[utf8]{inputenc}
+  % luainputenc would also work, but we don't want to depend on it, to
+  % remain compatible with earlier versions of pdflatex.
+  \expandafter\RequirePackage\expandafter[\@univ@inputenc]{inputenc}
 \else
   % Needed for ő and ű in non-fontspec fonts.
-  \RequirePackage[utf8]{luainputenc}
+  \expandafter\RequirePackage\expandafter[\@univ@inputenc]{luainputenc}
 \fi
-\RequirePackage{t1enc}
+\def\encodingdefault{T1}  % Part of t1enc.sty
+\fontencoding{T1}  % Part of t1enc.sty.
+% We don't run \selectfont here (t1enc.sty does), to avoid loading
+% ecrm1000.tfm here when it is not available (e.g. no
+% sudo apt-get install texlive-fonts-recommended).
+
 % TODO(pts): Add [font=tnr] for Times New Roman, Helvetica, Courier New.
 % TODO(pts): Add [fontspec] option for all fonts (cm, tg, tnr, old-times), only used in lualatex.
 \def\@univ@font@cm{%  Latin Modern fonts, bettern than CM and EC for international text in T1 encoding.
@@ -55,10 +63,27 @@
   %            unicode-math.
 }
 \csname @univ@font@\@univ@font\endcsname
+
+% Without this lualatex wouldn't consider the characters ő and ű in font
+% encoding T1 as letters during hyphenation.
 %
+% This magic is based on https://tex.stackexchange.com/a/469909/820
+\@tempcnta128 \loop\ifnum\@tempcnta<159 \ifnum\lccode\@tempcnta=0
+  \lccode\@tempcnta\@tempcnta\fi \advance\@tempcnta1 \repeat
+\@tempcnta160 \loop\ifnum\@tempcnta<190 \ifnum\lccode\@tempcnta=0
+  \lccode\@tempcnta\@tempcnta\fi \advance\@tempcnta1 \repeat
+\@tempcnta192 \loop\ifnum\@tempcnta<256 \ifnum\lccode\@tempcnta=0
+  \lccode\@tempcnta\@tempcnta\fi \advance\@tempcnta1 \repeat
+
+% Make loadhyph-hu.tex loaded by babel.sty in TeX Live 2019 load
+% hyph-hu.ec.tex rather than hyph-hu.tex in lualatex.
+%
+% This magic is based on https://tex.stackexchange.com/a/469909/820
+\let\kanjiskip\hsize
 % hungarian is the default.
 % Without this, \l@hungarian wouldn't be defined in lualatex.
-\usepackage[english,hungarian]{babel}
+\RequirePackage[english,hungarian]{babel}
+\let\kanjkiskip\@undefined  % Undo our hack above.
 % Override magyar.ldf to prevent warning about \usepackage[...]{inputenc}.
 \def\magyar@sugg@ie#1{}
 
