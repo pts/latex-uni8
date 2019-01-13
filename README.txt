@@ -23,7 +23,9 @@ uni8-hu.sty takes care of the following:
 * \usepackage[utf8]{inputenc} (or a variation of it).
 * It makes sure that magyar.ldf doesn't print a warning about inputenc.sty.
 * \usepackage{t1enc}
-* \usepackage[english,hungarian]{babel}
+* \usepackage[english,hungarian]{babel} (this includes setting up hyphenation).
+  If you want a different language, then do someting like
+  \PassOptionsToPackage{hungarian}{babel} before \usepackage{uni8-hu}.
 * \usepackage{soul} (or a variation of it, if available).
 * It makes the \ul command (as defined in soul.sty) should just work with
   footnotes and automatic hyphenation as well.
