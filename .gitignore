@@ -1,1 +1,6 @@
 *~
+/example_*.aux
+/example_*.log
+/example_*.pdf
+/example_*.dvi
+/example_*.ps
