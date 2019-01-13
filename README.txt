@@ -1,10 +1,10 @@
 pts-latex-uni8: Universal inputenc, fontend and babel for pdflatex + lualatex
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 pts-latex-uni8 contains some LaTeX style (.sty) files which make it easy to
-use input encoding (UTF-8 by default), font encoding (T1), babel (English
-language by default), hyphenation, underline (with soul.sty) and default
-text and math fonts (Computer Modern or Times) correctly with both pdflatex
-and lualatex.
+use input encoding (UTF-8 by default), fontspec.sty (optional), font encoding
+(T1 if fontspec.sty is not used), babel (English language by default),
+hyphenation, underline (with soul.sty) and default text and math fonts
+(Computer Modern or Times) correctly with both pdflatex and lualatex.
 
 How to use:
 
@@ -17,8 +17,6 @@ How to use:
 
 Limitations:
 
-* uni8.sty doesn't work with \usepackage{fontspec}. It may load fine, but
-  some characters or hyphenation will be incorrect.
 * \showhyphens doesn't display accented characters correctly in the console
   log. With pdflatex on an UTF-8 console all non-ASCII characters are wrong.
   With lualatex on an UTF-8 console some non-ASCII characters (e.g. ő and ű)
@@ -28,9 +26,8 @@ Limitations:
 uni8.sty takes care of the following:
 
 * \usepackage[utf8]{inputenc} (or a variation of it).
-* It makes sure that magyar.ldf (if \PassOptionsToPackage{hungarian}{babel}
-  is used) doesn't print a warning about inputenc.sty.
-* Setting up T1 font encoding (like \usepackage{t1enc}).
+* It sets up font encoding (like T1 encoding with \usepackage{t1enc} if
+  needed).
 * \usepackage[english]{babel} (this includes setting up hyphenation).
   If you want a different language, then do someting like
   \PassOptionsToPackage{hungarian}{babel} before \usepackage{uni8}.
@@ -38,19 +35,23 @@ uni8.sty takes care of the following:
 * It makes the \ul command (as defined in soul.sty) should just work with
   footnotes and automatic hyphenation as well.
 * It makes \hyphenation{...} exceptions work properly, even with accented
-  characters specified usually, encoded with the input encoding (UTF-8
-  by default). (For lualatex, it makes \patterns{...} work similarly.)
+  characters specified the usual way (encoded with the input encoding, UTF-8
+  by default). (For lualatex, it also makes \patterns{...} work similarly.)
+* It makes sure that magyar.ldf (if \PassOptionsToPackage{hungarian}{babel}
+  is used) doesn't print useless warnings about inputenc.sty or t1enc.sty.
 
 Usage recommendations and best practices:
 
 * Use \usepackage{uni8} with pdflatex it possible.
-* \usepackage{uni8} also works with lualatex (tested in TeX Live 2019),
-  but for simplicity and increased backwards compatibility don't use lualatex
-  unless you find something which something doesn't work with pdflatex. The
-  most fragile part of how uni8.sty uses lualatex is setting up hyphenation
+* If you need lualatex, probaby you want to use Unicode fonts, thus use
+  \usepackage[fontspec]{uni8}. Configure fonts with \fontspec{...} and
+  \setmainfont{...} as usual. The default for for uni8 is cm (Latin Modern).
+* \usepackage{uni8} also works with lualatex without fontspec.sty
+  (tested on TeX Live 2019), but for simplicity and increased backwards
+  compatibility (especially for magyar.ldf), use pdflatex instead of
+  lualatex-without-fontspec.sty if possible. The most fragile part of how
+  uni8.sty uses lualatex without fontspec.sty is setting up hyphenation
   patterns with the T1 encoding.
-* If you are using \usepackage{fontspec} with lualatex, uni8.sty can't
-  help you (yet), and we don't have recommendations for you (yet).
 
 Features:
 
@@ -65,5 +66,36 @@ Features:
   users shouldn't need this nowaday, the UTF-8 default is better.
 * Use \usepackage[inputenc=latin1] to use ISO-8859-1 input encoding. Most
   users shouldn't need this nowaday, the UTF-8 default is better.
+* uni8.sty works with hyperref.sty, color.sty and xcolor.sty in both
+  pdflatex and lualatex.
+
+How to install LaTeX on Debian:
+
+* To get the pdflatex command for TeX Live 2019 on Debian, run:
+  sudo apt-get install texlive-latex-base
+* To get the lualatex command (and the minimal defaults for uni8.sty), run:
+  sudo apt-get install texlive-latex-base texlive-luatex
+* To make [fontspec] (eqivalent to \usepackage{fontspec}) work, run:
+  sudo apt-get install texlive-latex-base texlive-luatex texlive-latex-recommended
+* To make [font=tg] work, run:
+  sudo apt-get install texlive-latex-base texlive-luatex texlive-latex-recommended
+* To make \usepackage{soul} (automatically done by uni8.sty) work, run:
+  sudo apt-get install texlive-latex-base texlive-latex-extra
+* To make \usepackage{lmodern} (automatically done by uni8.sty) work, run:
+  sudo apt-get install texlive-latex-base
+* To make \PassOptionsToPackage{english,american,british}{babel} (and the
+  corresponding hyphenation) work, run:
+  sudo apt-get install texlive-latex-base
+* To make \PassOptionsToPackage{german}{babel} work, run:
+  sudo apt-get install texlive-latex-base texlive-lang-german
+* To make \PassOptionsToPackage{spanish}{babel} work, run:
+  sudo apt-get install texlive-latex-base texlive-lang-spanish
+* To make \PassOptionsToPackage{french}{babel} work, run:
+  sudo apt-get install texlive-latex-base texlive-lang-french
+* To make \PassOptionsToPackage{italian}{babel} work, run:
+  sudo apt-get install texlive-latex-base texlive-lang-italian
+* To make \PassOptionsToPackage{hungarian}{babel} (and the corresponding
+  hyphenation) work, run:
+  sudo apt-get install texlive-latex-base texlive-lang-european
 
 __END__
