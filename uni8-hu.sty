@@ -61,8 +61,12 @@
 \usepackage[english,hungarian]{babel}
 % Override magyar.ldf to prevent warning about \usepackage[...]{inputenc}.
 \def\magyar@sugg@ie#1{}
-% For non-utf8 input encodings, use \usepackage{soul}.
-\RequirePackage{soulutf8}
-\def\underline{\ul}  % \underline is built-in. Let's use soul's.
-\def\uline{\ul}  % \uline is from ulem. Let's use soul's.
+
+\IfFileExists{soulutf8.sty}{\IfFileExists{soul.sty}{
+  % For non-utf8 input encodings, use \usepackage{soul}.
+  \RequirePackage{soulutf8}
+  \def\underline{\ul}  % \underline is built-in. Let's use soul's.
+  \def\uline{\ul}  % \uline is from ulem. Let's use soul's.
+}{}}{}
+
 \endinput
