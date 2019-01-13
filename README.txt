@@ -46,5 +46,9 @@ Features:
   text and math default fonts (rather than Latin Modern, which is based on
   Computer Modern). This uses the new old URW-based text fonts with
   times.sty.
+* Use \usepackage[inputenc=latin2] to use ISO-8859-2 input encoding. Most
+  users shouldn't need this nowaday, the UTF-8 default is better.
+* Use \usepackage[inputenc=latin1] to use ISO-8859-1 input encoding. Most
+  users shouldn't need this nowaday, the UTF-8 default is better.
 
 __END__

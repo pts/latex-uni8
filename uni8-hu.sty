@@ -9,7 +9,11 @@
 \ProvidesPackage{uni8-hu}[2019/01/01 v0.01 Universal Hungarian UTF-8 style]
 
 \def\@univ@font{cm}
-\def\@univ@inputenc{utf8}
+\def\@univ@inputenc{utf8}\def\@univ@inputenc@isutfe{1}
+\DeclareOption{inputenc=utf8}{\def\@univ@inputenc{utf8}\def\@univ@inputenc@isutfe{1}}
+\DeclareOption{inputenc=utf8x}{\def\@univ@inputenc{utf8x}\def\@univ@inputenc@isutfe{1}}
+\DeclareOption{inputenc=latin1}{\def\@univ@inputenc{latin1}\def\@univ@inputenc@isutfe{0}}
+\DeclareOption{inputenc=latin2}{\def\@univ@inputenc{latin2}\def\@univ@inputenc@isutfe{0}}
 \DeclareOption{font=cm}{\def\@univ@font{cm}}  % Preferred.
 \DeclareOption{font=lm}{\def\@univ@font{cm}}
 \DeclareOption{font=ec}{\def\@univ@font{cm}}
@@ -87,11 +91,30 @@
 % Override magyar.ldf to prevent warning about \usepackage[...]{inputenc}.
 \def\magyar@sugg@ie#1{}
 
-\IfFileExists{soulutf8.sty}{\IfFileExists{soul.sty}{
-  % For non-utf8 input encodings, use \usepackage{soul}.
-  \RequirePackage{soulutf8}
-  \def\underline{\ul}  % \underline is built-in. Let's use soul's.
-  \def\uline{\ul}  % \uline is from ulem. Let's use soul's.
-}{}}{}
+\edef\reserved@a{\csname inputencodingname\endcsname}
+\edef\reserved@b{utf8}
+\ifx\reserved@a\reserved@b
+  \def\@univ@inputenc@isutfe{1}
+\else
+  \edef\reserved@b{utf8x}
+  \ifx\reserved@a\reserved@b
+    \def\@univ@inputenc@isutfe{1}
+  \fi
+\fi
+
+\if1\@univ@inputenc@isutfe
+  \IfFileExists{soulutf8.sty}{\IfFileExists{soul.sty}{
+    % For non-utf8 input encodings, use \usepackage{soul}.
+    \RequirePackage{soulutf8}
+    \def\underline{\ul}  % \underline is built-in. Let's use soul's.
+    \def\uline{\ul}  % \uline is from ulem. Let's use soul's.
+  }{}}{}
+\else
+  \IfFileExists{soul.sty}{
+    \usepackage{soul}
+    \def\underline{\ul}  % \underline is built-in. Let's use soul's.
+    \def\uline{\ul}  % \uline is from ulem. Let's use soul's.
+  }{}
+\fi
 
 \endinput

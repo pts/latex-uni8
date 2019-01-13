@@ -1,0 +1,16 @@
+% example_pu.tex, works with modern pdflatex and lualatex in TeX Live 2019.
+% The input encoding is ISO-8859-2 (latin2).
+\documentclass{article}
+\usepackage[inputenc=latin2]{uni8-hu}
+\begin{document}
+\showhyphens{árvíztûrõ tükörfúrógép}
+\hrule width \hsize
+\bigskip
+\vbox{\Huge\hsize7em\hrule\noindent . . . . . bababababababa\hrule}
+\bigskip
+\vbox{\Huge\hsize7em\hrule\noindent . . . . . bábábábábábábá\hrule}
+\bigskip
+\vbox{\Huge\hsize7em\hrule\noindent . . . . . bõbõbõbõbõbõbõ\hrule}
+\bigskip
+\vfill\hrule width\hsize
+\end{document}
