@@ -190,4 +190,35 @@
     \pdfpagewidth\paperwidth \pdfpageheight\paperheight \fi}
 \UnivFixPaperSize
 
+% Display a warning if the user calls \fontencoding{...} unexpectedly in the
+% preamble.
+\def\@univ@sugg@fontenc{%
+  % We want T1 font encoding, because hyphenation patterns are in T1
+  % encoding.
+  \edef\reserved@a{%
+    \expandafter\ifx\csname ver@fontspec.sty\endcsname\relax T1\else TU\fi}%
+  \edef\reserved@b{\f@encoding}%
+  \ifx\reserved@a\reserved@b\else
+   \PackageWarningNoLine{uni8}{The font encoding is
+     \expandafter\strip@prefix\meaning\reserved@b, should be
+     \expandafter\strip@prefix\meaning\reserved@a}%
+  \fi}
+% Display a warning if the user loads a package in the preamble which would
+% break what uni8.sty has set up.
+\def\@univ@sugg@fontspec@package#1{%
+  \expandafter\ifx\csname ver@fontspec.sty\endcsname\relax\else
+    \expandafter\ifx\csname ver@#1.sty\endcsname\relax\else
+      \PackageWarningNoLine{uni8}{[fontspec] conflicts with #1.sty\MessageBreak
+        Solution: remove \string\usepackage...{#1}}%
+    \fi
+  \fi}
+\AtBeginDocument{%
+  %\selectfont  % Make \f@encoding and \cf@encoding match.
+  \@univ@sugg@fontspec@package{t1enc}%
+  \@univ@sugg@fontspec@package{fontenc}%
+  \@univ@sugg@fontspec@package{inputenc}%
+  \@univ@sugg@fontspec@package{luainputenc}%
+  \@univ@sugg@fontenc
+}
+
 \endinput
