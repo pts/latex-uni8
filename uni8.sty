@@ -106,7 +106,6 @@
   % ecrm1000.tfm here when it is not available (e.g. no
   % sudo apt-get install texlive-fonts-recommended).
   % TODO(pts): Add [font=tnr] for Times New Roman, Helvetica, Courier New.
-  % TODO(pts): Add \pdfpageheight.
   \def\@univ@font@cm{%  Latin Modern fonts, bettern than CM and EC for international text in T1 encoding.
     \RequirePackage{lmodern}
   }
@@ -116,6 +115,7 @@
     %
     % TODO(pts): Better with newtxtext and newtxmath?
     % https://tex.stackexchange.com/q/469726/820
+    % TODO(pts): Check txfonts.sty aand https://ctan.org/pkg/newtx as well.
     \RequirePackage{mathptmx}
     \RequirePackage{tgtermes}
     \RequirePackage{tgheros}
@@ -128,7 +128,6 @@
     %\RequirePackage{times}
     % Also changes math fonts.
     \RequirePackage{mathptmx}
-    % TODO(pts): Check txfonts.sty aand https://ctan.org/pkg/newtx as well.
   }
   \csname @univ@font@\@univ@font\endcsname
 
@@ -175,5 +174,16 @@
     \def\uline{\ul}  % \uline is from ulem. Let's use soul's.
   }{}
 \fi
+
+% Propagate a4paper, a5paper, b5paper, letterpaper, legalpaper,
+% executivepaper, landscape documentclass options to actual paper size
+% as understood by dvips (\special{papersize=...}), pdflatex (\pdfpagewidth)
+% and lualatex (\pagewidth).
+\def\UnivFixPaperSize{%
+  \ifx\pdfpagewidth\undefined
+    \ifx\pagewidth\undefined\special{papersize=\paperwidth,\paperheight}\else
+    \pagewidth\paperwidth \pageheight\paperheight \fi\else
+    \pdfpagewidth\paperwidth \pdfpageheight\paperheight \fi}
+\UnivFixPaperSize
 
 \endinput

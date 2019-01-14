@@ -1,10 +1,11 @@
 pts-latex-uni8: Universal inputenc, fontend and babel for pdflatex + lualatex
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 pts-latex-uni8 contains some LaTeX style (.sty) files which make it easy to
-use input encoding (UTF-8 by default), fontspec.sty (optional), font encoding
-(T1 if fontspec.sty is not used), babel (English language by default),
-hyphenation, underline (with soul.sty) and default text and math fonts
-(Computer Modern or Times) correctly with both pdflatex and lualatex.
+use input encoding (UTF-8 by default), fontspec.sty (optional), font
+encoding (T1 if fontspec.sty is not used), babel (English language by
+default), hyphenation, underline (with soul.sty), default text and math
+fonts (Computer Modern or Times) and paper sizes correctly with both
+pdflatex and lualatex.
 
 How to use:
 
@@ -31,6 +32,7 @@ uni8.sty takes care of the following:
   instead.
 * It sets up input encoding (UTF-8 is the default, it does
   \usepackage[utf8]{inputenc} or a variation of that).
+* It sets the page size based on \documentclass[a4paper]{article} etc.
 * \usepackage[english]{babel} (this includes setting up hyphenation).
   If you want a different language, then do someting like
   \PassOptionsToPackage{hungarian}{babel} before \usepackage{uni8}.
@@ -72,8 +74,10 @@ Features:
   users shouldn't need this nowaday, the UTF-8 default is better.
 * Use \usepackage[inputenc=latin1] to use ISO-8859-1 input encoding. Most
   users shouldn't need this nowaday, the UTF-8 default is better.
-* uni8.sty works with hyperref.sty, color.sty and xcolor.sty in both
+* uni8.sty is compatible with hyperref.sty, color.sty and xcolor.sty in both
   pdflatex and lualatex.
+* uni8.sty works with pdflatex, lualatex and latex (with .dvi
+  output).
 
 How to install LaTeX on Debian Buster, with TeX Live 2019:
 
