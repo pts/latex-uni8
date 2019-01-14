@@ -1,0 +1,13 @@
+% -*- coding: utf-8 -*-
+% example_lm.tex, works with pdflatex and modern lualatex in TeX Live 2019.
+% The input encoding is UTF-8 (utf8).
+\documentclass[a5paper]{article}
+\def\magyarOptions{defaults=hu-min}
+\PassOptionsToPackage{magyar}{babel}
+\usepackage[inputenc=utf8]{uni8}
+\begin{document}
+\section{Első}\label{f1}
+\Aref{f2}.\ szakasz se érdekesebb ennél.
+\section{Második}\label{f2}
+\Aref{f1}.\ szakasz se érdekesebb ennél.
+\end{document}
