@@ -1,0 +1,25 @@
+% -*- coding: utf-8 -*-
+% example_pur.tex, works with pdflatex, but not with lualatex in TeX Live 2019.
+% The input encoding is UTF-8 (utf8).
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{t1enc}
+\def\magyarOptions{defaults=hu-min}
+\usepackage[magyar]{babel}
+\begin{document}
+% Alternatively, this works in lualatex: \language99 \patterns{ő9y}
+\hyphenation{yő-yő-yő-yő-yő-yő-yő}
+\showhyphens{yőyőyőyőyőyőyő}
+\showhyphens{árvíztűrő tükörfúrógép}
+\hrule width \hsize
+\bigskip
+\vbox{\Huge\hsize7em\hrule\noindent . . . . . bababababababa\hrule}
+\bigskip
+\vbox{\Huge\hsize7em\hrule\noindent . . . . . bábábábábábábá\hrule}
+\bigskip
+\vbox{\Huge\hsize7em\hrule\noindent . . . . . bőbőbőbőbőbőbő\hrule}
+\bigskip
+\vbox{\Huge\hsize7em\hrule\noindent . . . . . yőyőyőyőyőyőyő\hrule}
+\bigskip
+\vfill\hrule width\hsize
+\end{document}

@@ -1,0 +1,29 @@
+% -*- coding: iso-8859-2 -*-
+% example_flr.tex, works with modern lualatex in TeX Live 2019.
+% The input encoding is ISO-8859-2 (latin2).
+\documentclass{article}
+\def\magyarOptions{defaults=hu-min}
+\usepackage[magyar]{babel}
+\usepackage[latin2]{luainputenc}  % Must be loaded after babel.sty.
+\usepackage{fontspec}
+\begin{document}
+% Alternatively, this works in lualatex: \language99 \patterns{õ9y}
+\hyphenation{yõ-yõ-yõ-yõ-yõ-yõ-yõ}
+\showhyphens{yõyõyõyõyõyõyõ}
+\showhyphens{árvíztûrõ tükörfúrógép}
+\hrule width \hsize
+\bigskip
+\vbox{\Huge\hsize7em\hrule\noindent . . . . . bababababababa\hrule}
+\bigskip
+\vbox{\Huge\hsize7em\hrule\noindent . . . . . bábábábábábábá\hrule}
+\bigskip
+\vbox{\Huge\hsize7em\hrule\noindent . . . . . bõbõbõbõbõbõbõ\hrule}
+\bigskip
+\vbox{\Huge\hsize7em\hrule\noindent . . . . . yõyõyõyõyõyõyõ\hrule}
+\bigskip
+\vbox{\Huge\hsize9em\hrule\noindent$\sin^2\alpha+\cos^2\alpha=1$\hrule}
+\bigskip
+\vbox{\Huge\hsize7em\hrule\noindent Hel\texttt{lo}, \textsf{Wörld!}\hrule}
+\bigskip
+\vfill\hrule width\hsize
+\end{document}

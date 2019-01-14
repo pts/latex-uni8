@@ -1,0 +1,14 @@
+% -*- coding: utf-8 -*-
+% example_pmr.tex, works with pdflatex, but not with lualatex in TeX Live 2019.
+% The input encoding is UTF-8 (utf8).
+\documentclass[a5paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{t1enc}
+\def\magyarOptions{defaults=hu-min}
+\usepackage[magyar]{babel}
+\begin{document}
+\section{Első}\label{f1}
+\Aref{f2}.\ szakasz se érdekesebb ennél.
+\section{Második}\label{f2}
+\Aref{f1}.\ szakasz se érdekesebb ennél.
+\end{document}
