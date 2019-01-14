@@ -4,3 +4,5 @@
 /example_*.pdf
 /example_*.dvi
 /example_*.ps
+/missfont.log
+/texput.log
