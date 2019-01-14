@@ -2,7 +2,7 @@
 % uni8.sty: Universal inputenc, fontend and babel for pdflatex + lualatex
 % by pts@fazekas.hu at Fri Jan 11 15:48:05 CET 2019
 %
-% See README.txt for detailed documentation.
+% uni8.sty does these:
 %
 % * It sets up hyphenation patterns correctly for pdflatex and lualatex,
 %   with or without fontspec.
@@ -13,6 +13,11 @@
 % * It sets the default fonts with [font=...] options.
 % * It sets the input encoding with [inputenc=...] options.
 % * It loads fontspec.sty with the [fontspec] option.
+% * It sets the page size based on [a4paper] etc. to \documentclass.
+% * It hides useless warnings about inputenc.sty or t1enc.sty by magyar.ldf.
+%
+% See README.txt for more features and detailed documentation.
+%
 \ProvidesPackage{uni8}[2019/01/02 v0.02 Universal LaTeX inputenc and fontenc]
 
 % Extra customization from .tex: \PassOptionsToPackage{hungarian}{babel}
