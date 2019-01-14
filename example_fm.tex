@@ -1,10 +1,10 @@
 % -*- coding: utf-8 -*-
-% example_pm.tex, works with pdflatex and modern lualatex in TeX Live 2019.
+% example_fm.tex, works with modern lualatex in TeX Live 2019.
 % The input encoding is UTF-8 (utf8).
 \documentclass[a5paper]{article}
 \def\magyarOptions{defaults=hu-min}
 \PassOptionsToPackage{magyar}{babel}
-\usepackage{uni8}
+\usepackage[fontspec]{uni8}
 \begin{document}
 \section{Első}\label{f1}
 \Aref{f2}.\ szakasz se érdekesebb ennél.
