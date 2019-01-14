@@ -86,8 +86,8 @@
   \expandafter\def\csname opt@babel.sty\endcsname{english}\fi
 
 \if1\@univ@fontspec
-  \ifx\luatexversion\@undefined\PackageError{uni8}
-      {[fontspec] needs to be run with lualatex}{}
+  \ifnum0\ifx\luatexversion\@undefined1\fi\ifx\luatexversion\relax1\fi>0
+    \PackageError{uni8}{[fontspec] needs to be run with lualatex}{}
     \def\@univ@fontspec{0}% Disable [fontspec] as a fallback.
   \fi
 \fi
@@ -125,7 +125,7 @@
   \csname @univ@font@\@univ@font\endcsname
   \normalfont\selectfont
 \else
-  \ifx\luatexversion\@undefined
+  \ifnum0\ifx\luatexversion\@undefined1\fi\ifx\luatexversion\relax1\fi>0
     % luainputenc would also work, but we don't want to depend on it, to
     % remain compatible with earlier versions of pdflatex.
     \expandafter\RequirePackage\expandafter[\@univ@inputenc]{inputenc}
