@@ -74,10 +74,14 @@
   \def\magyar@sugg@to#1{}
 
   \def\@univ@font@cm{%  Latin Modern fonts, bettern than CM and EC for international text in T1 encoding.
-    % TODO(pts): Add the default explicitly here.
+    % Even though Latin Modern is the default text font for lualatex (see
+    % fonttext.cfg in format generation time, it loads tulmr.fd), cmr is
+    % still the default math font. By loading lmodern.sty we also change the
+    % default math font to (non-Unicode) Latin Modern (e.g. lmmi10.pfb).
+    \RequirePackage{lmodern}
   }
   \def\@univ@font@times{% TeX Gyre fonts, great alternative for Times, Helvetica and Courier.
-    \usepackage{unicode-math}
+    \RequirePackage{unicode-math}
     \setmainfont{TeX Gyre Termes}
     \setsansfont{TeX Gyre Heros}[Scale=MatchLowercase]
     \setmonofont{TeX Gyre Cursor}[Scale=MatchLowercase]
