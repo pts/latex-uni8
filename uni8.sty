@@ -91,6 +91,7 @@
     \@univ@font@times  % old-times is not available in Unicode, using times.
   }
   \csname @univ@font@\@univ@font\endcsname
+  \normalfont\selectfont
 \else
   \ifx\luatexversion\@undefined
     % luainputenc would also work, but we don't want to depend on it, to
@@ -130,6 +131,9 @@
     \RequirePackage{mathptmx}
   }
   \csname @univ@font@\@univ@font\endcsname
+  % Without this \cf@encoding would remain TU (Unicode), but we want both
+  % \cf@encoding and \f@encoding T1.
+  \normalfont\selectfont
 
   % Without this lualatex wouldn't consider the characters ő and ű in font
   % encoding T1 as letters during hyphenation.
