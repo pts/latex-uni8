@@ -40,6 +40,35 @@
 \DeclareOption{nop}{}
 \ProcessOptions\relax
 
+\def\@univ@fatal@ifpackage#1{%
+  \expandafter\ifx\csname ver@#1.sty\endcsname\relax\else
+    \PackageError{uni8}{Package #1 is already loaded.\MessageBreak
+      Solution: remove \string\usepackage...{#1}}{}\expandafter\@@end
+  \fi}
+% We fail early if any of these packages are already loaded, because we
+% want to load them, in the correct order.
+\@univ@fatal@ifpackage{t1enc}
+\@univ@fatal@ifpackage{fontenc}
+\@univ@fatal@ifpackage{inputenc}
+\@univ@fatal@ifpackage{luainputenc}
+\@univ@fatal@ifpackage{fontspec}
+\@univ@fatal@ifpackage{babel}
+
+\def\@univ@fatal@ifpackageopt#1{%
+  \expandafter\ifx\csname opt@#1.sty\endcsname\relax\else
+    \PackageError{uni8}{Package #1 already has options.\MessageBreak
+      Solution: remove \string\PassOptionsToPackage{...}{#1}}{}%
+      \expandafter\@@end
+  \fi}
+% We fail early if any of these packages already have options, becase we
+% want to specify and control the correct options for them.
+\@univ@fatal@ifpackageopt{t1enc}
+\@univ@fatal@ifpackageopt{fontenc}
+\@univ@fatal@ifpackageopt{inputenc}
+\@univ@fatal@ifpackageopt{luainputenc}
+%\@univ@fatal@ifpackageopt{fontspec}  % Passing options to fontspec.sty is OK.
+%\@univ@fatal@ifpackageopt{babel}  % Passing options to babel.sty is OK.
+
 % if #1 specifies an UTF-8 encoding, runs #2, otherwise runs #3.
 % @param #1 a control sequence.
 \def\@univ@ifutfe#1#2#3{%
@@ -63,11 +92,14 @@
   \fi
 \fi
 \if1\@univ@fontspec
-  \@univ@ifutfe\@univ@inputenc{}{\PackageError{uni8}
-      {[fontspec] conflicts with [inputenc=\@univ@inputenc].\MessageBreak
-       Use [inputenc=utf8] with [fontspec]}{}\@@end}
-  \def\reserved@a{cm}%
   \RequirePackage{babel}
+  % It's important to load luainputenc.sty after babel.sty, otherwise
+  % loadhyph-hu.tex loaded by babel.sty would load hyphenation patterns
+  % (e.g. hyph-hu.tex) with conv-utf8-ec.tex. But we are using TU font
+  % encoding, and conv-utf8-ec.tex would make hyphenation patterns use the
+  % T1 font encoding.
+  \@univ@ifutfe\@univ@inputenc{}{
+    \expandafter\RequirePackage\expandafter[\@univ@inputenc]{luainputenc}}
   \RequirePackage{fontspec}  % lmodern font is the default for fontspec.
   % Override magyar.ldf loaded by babel.sty to prevent useless warning about
   % \usepackage{t1enc}.
@@ -212,13 +244,28 @@
         Solution: remove \string\usepackage...{#1}}%
     \fi
   \fi}
+\def\@univ@sugg@inputencoding{%
+  \if1\@univ@inputenc@isutfe
+    \expandafter\ifx\csname ver@fontspec.sty\endcsname\relax\else
+      \expandafter\ifx\csname inputencodingname\endcsname\relax\else
+        % Actually, if \inputencodingname is lutf8, that would work here,
+        % but we display the warning anyway to discourage the user to do
+        % \usepackage[...]{luainputenc} manually. By doing so we we make
+        % things less diverse, thus less likely to fail.
+        \PackageError{uni8}{[fontspec] conflicts with input encoding:
+          \expandafter\strip@prefix\meaning\inputencodingname\MessageBreak
+          Solution: remove \string\usepackage...{luainputenc}}{}\@@end
+      \fi
+    \fi
+  \fi}
+
 \AtBeginDocument{%
-  %\selectfont  % Make \f@encoding and \cf@encoding match.
+  \selectfont  % Make \f@encoding and \cf@encoding match.
   \@univ@sugg@fontspec@package{t1enc}%
   \@univ@sugg@fontspec@package{fontenc}%
   \@univ@sugg@fontspec@package{inputenc}%
-  \@univ@sugg@fontspec@package{luainputenc}%
   \@univ@sugg@fontenc
+  \@univ@sugg@inputencoding
 }
 
 \endinput
