@@ -16,6 +16,9 @@ How to use:
   ...
   \end{document}
 
+See the project page https://github.com/pts/pts-latex-uni8 for example files
+and the latest updates.
+
 Limitations:
 
 * \showhyphens doesn't display accented characters correctly in the console
