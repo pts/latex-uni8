@@ -1,7 +1,7 @@
-pts-latex-uni8: Universal inputenc, fontend and babel for pdflatex + lualatex
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-pts-latex-uni8 contains some LaTeX style (.sty) files which make it easy to
-use input encoding (UTF-8 by default), fontspec.sty (optional), font
+latex-uni8: Universal inputenc, fontenc and babel for pdflatex + lualatex
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+uni8.sty is a LaTeX style file which makes it easy to use input encoding
+(UTF-8 by default, can be changed), fontspec.sty (optional), font
 encoding (T1 if fontspec.sty is not used), babel (English language by
 default), hyphenation, underline (with soul.sty), default text and math
 fonts (Computer Modern or Times) and paper sizes correctly with both
@@ -16,16 +16,22 @@ How to use:
   ...
   \end{document}
 
-See the project page https://github.com/pts/pts-latex-uni8 for example files
+See the project page https://github.com/pts/latex-uni8 for example files
 and the latest updates.
+
+The name uni8 is an abbreviation of: universal UTF-8 and 8-bit input
+encoding. It indicates that uni8.sty can set up UTF-8 (utf8) and legacy
+8-bit input encodings (e.g. latin1, latin2) correctly in many environments
+(pdflatex or lualatex, with or without fontspec.sty, T1 or Unicode font
+encoding).
 
 Limitations:
 
 * \showhyphens doesn't display accented characters correctly in the console
   log. With pdflatex on an UTF-8 console all non-ASCII characters are wrong.
-  With lualatex on an UTF-8 console some non-ASCII characters (e.g. ő and ű)
-  are wrong: the ones which are at a different location in Unicode and T1
-  encoding.
+  With lualatex on an UTF-8 console with T1 font encoding some non-ASCII
+  characters (e.g. ő and ű) are wrong: the ones which are at a different
+  location in Unicode and T1 encoding.
 
 uni8.sty takes care of the following:
 
