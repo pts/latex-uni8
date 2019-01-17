@@ -123,11 +123,11 @@ How to install LaTeX on Debian Buster, with TeX Live 2019:
 
 Compatibility with TeX Live:
 
-* The hyphen-hungarian TeX Live package is not needed by uni8.sty, but it is
-  needed by example_*.tex.
+* The hyphen-hungarian and babel-hungarian TeX Live packages are not needed
+  by uni8.sty, but it is needed by example_*.tex.
 * TeX Live 2010--2014 produces incorrect results for `lualatex example_pu.tex':
   can't hyphenate bő-bő-... .
-  $ tlmgr install scheme-basic luainputenc luatexbase lm hyphen-hungarian
+  $ tlmgr install scheme-basic luainputenc luatexbase lm hyphen-hungarian babel-hungarian
   The reason why it doesn't work is that before TeX Live 2015 luababel.def
   didn't have \bbl@luapatterns, which contained the \input of
   loadhyph-hu.tex, and the hyphenation \patterns were set up at format
@@ -138,11 +138,11 @@ Compatibility with TeX Live:
   UTF-8 to T1: read patterns with lang.patterns, then call
   lang.clear_patterns, then call lang.patterns with the T1-encoded patterns.
 * Tex Live 2015--2019: Both pdflatex and lualatex work after this:
-  $ tlmgr install scheme-basic luainputenc luatexbase lm ctablestack hyphen-hungarian
+  $ tlmgr install scheme-basic luainputenc luatexbase lm ctablestack hyphen-hungarian babel-hungarian
 * pdflatex example_pu.tex: works with TeX Live 2005--2019 if the packages
-  lm (Latin Modern) and hyphen-hungarian are installed. Tested with TeX Live
-  2005, 2017, 2018 and 2019. (Earlier releases of TeX live may also work,
-  but they may not have the lm package available.)
+  lm (Latin Modern), hyphen-hungarian and babel-hungarian are installed.
+  Tested with TeX Live 2005, 2017, 2018 and 2019. (Earlier releases of TeX
+  live may also work, but they may not have the lm package available.)
 * lualatex example_pu.tex: works with TeX Live 2017--2019.
 
 Old TeX Live download links:
