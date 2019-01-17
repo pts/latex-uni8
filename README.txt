@@ -58,10 +58,12 @@ uni8.sty takes care of the following:
 
 Usage recommendations and best practices:
 
-* Use \usepackage{uni8} with pdflatex it possible.
-* If you need lualatex, probaby you want to use Unicode fonts, thus use
+* Use \usepackage{uni8} with pdflatex (rather than lualatex) if possible,
+  because pdflatex is faster.
+* If you need lualatex, probably you want to use Unicode fonts, so use
   \usepackage[fontspec]{uni8}. Configure fonts with \fontspec{...} and
-  \setmainfont{...} as usual. The default for for uni8 is cm (Latin Modern).
+  \setmainfont{...} as usual. The default font for uni8 is Computer Modern
+  (Latin Modern).
 * \usepackage{uni8} also works with lualatex without fontspec.sty
   (tested on TeX Live 2019), but for simplicity and increased backwards
   compatibility (especially for magyar.ldf), use pdflatex instead of
