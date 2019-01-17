@@ -181,12 +181,19 @@
   % encoding T1 as letters during hyphenation.
   %
   % This magic is based on https://tex.stackexchange.com/a/469909/820
-  \@tempcnta128 \loop\ifnum\@tempcnta<159 \ifnum\lccode\@tempcnta=0
-    \lccode\@tempcnta\@tempcnta\fi \advance\@tempcnta1 \repeat
-  \@tempcnta160 \loop\ifnum\@tempcnta<190 \ifnum\lccode\@tempcnta=0
-    \lccode\@tempcnta\@tempcnta\fi \advance\@tempcnta1 \repeat
-  \@tempcnta192 \loop\ifnum\@tempcnta<256 \ifnum\lccode\@tempcnta=0
-    \lccode\@tempcnta\@tempcnta\fi \advance\@tempcnta1 \repeat
+  % Also using https://en.wikipedia.org/wiki/Cork_encoding
+  \@tempcnta128 \loop\ifnum\@tempcnta<158
+    \@tempcntb\@tempcnta \advance\@tempcntb32
+    \lccode\@tempcnta\@tempcntb \advance\@tempcnta\@ne \repeat
+  \lccode158 158 \lccode159 0
+  \@tempcnta160 \loop\ifnum\@tempcnta<189
+    \lccode\@tempcnta\@tempcnta \advance\@tempcnta\@ne \repeat
+  \catcode189 0 \lccode190 0 \lccode191 0
+  \@tempcnta192 \loop\ifnum\@tempcnta<224
+    \@tempcntb\@tempcnta \advance\@tempcntb32
+    \lccode\@tempcnta\@tempcntb \advance\@tempcnta1 \repeat
+  \@tempcnta224 \loop\ifnum\@tempcnta<256
+    \lccode\@tempcnta\@tempcnta \advance\@tempcnta1 \repeat
 
   % Make loadhyph-hu.tex loaded by babel.sty in TeX Live 2019 load
   % hyph-hu.ec.tex rather than hyph-hu.tex in lualatex.
