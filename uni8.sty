@@ -101,7 +101,7 @@
     \def\@univ@fontspec{0}% Disable [fontspec] as a fallback.
   \fi
 \fi
-\if1\@univ@fontspec
+\if1\@univ@fontspec  % [fontspec] is selected, use TU (Unicode) encoding.
   \RequirePackage{babel}
   % It's important to load luainputenc.sty after babel.sty, otherwise
   % loadhyph-hu.tex loaded by babel.sty would load hyphenation patterns
@@ -134,9 +134,9 @@
   }
   \csname @univ@font@\@univ@font\endcsname
   \normalfont\selectfont
-\else
+\else  % [fontspec] is not selected: use T1 font encoding.
   \ifnum0\ifx\luatexversion\@undefined1\fi\ifx\luatexversion\relax1\fi>0
-    % luainputenc would also work, but we don't want to depend on it, to
+    % luainputenc.sty would also work, but we don't want to depend on it, to
     % remain compatible with earlier versions of pdflatex.
     \expandafter\RequirePackage\expandafter[\@univ@inputenc]{inputenc}
   \else
@@ -258,7 +258,7 @@
   \if1\@univ@inputenc@isutfe
     \expandafter\ifx\csname ver@fontspec.sty\endcsname\relax\else
       \expandafter\ifx\csname inputencodingname\endcsname\relax\else
-        % Actually, if \inputencodingname is lutf8, that would work here,
+        % Actually, if \inputencodingname is lutf8, it would work here,
         % but we display the warning anyway to discourage the user to do
         % \usepackage[...]{luainputenc} manually. By doing so we we make
         % things less diverse, thus less likely to fail.
