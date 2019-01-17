@@ -125,13 +125,18 @@ Compatibility with TeX Live:
 
 * The hyphen-hungarian TeX Live package is not needed by uni8.sty, but it is
   needed by example_*.tex.
-* TeX Live 2010 tmlgr doesn't work with Perl 5.24 (errors in TLWinGoo.pm).
-* TeX Live 2011--2014 produces incorrect results for `lualatex example_pu.tex':
-  can't hyphenate bő-bő-... It's strange that loadhyph-hu.tex exists and it's
-  mentioned in language.dat.lua, but Babel can't find or load it.
-  (language.dat.lua is loaded by luababel.def.) If we could solve this loading
-  problem, maybe that would be enough.
+* TeX Live 2010--2014 produces incorrect results for `lualatex example_pu.tex':
+  can't hyphenate bő-bő-... .
   $ tlmgr install scheme-basic luainputenc luatexbase lm hyphen-hungarian
+  The reason why it doesn't work is that before TeX Live 2015 luababel.def
+  didn't have \bbl@luapatterns, which contained the \input of
+  loadhyph-hu.tex, and the hyphenation \patterns were set up at format
+  creation time, thus by the time uni8.sty is loaded it's too late to set up
+  \patterns in a different font encoding (i.e. T1 instead of UTF-8).
+  A possible fix in the future could be adding Lua code to convert
+  lang.patterns (see http://www.luatex.org/svn/trunk/manual/luatex.pdf) from
+  UTF-8 to T1: read patterns with lang.patterns, then call
+  lang.clear_patterns, then call lang.patterns with the T1-encoded patterns.
 * Tex Live 2015--2019: Both pdflatex and lualatex work after this:
   $ tlmgr install scheme-basic luainputenc luatexbase lm ctablestack hyphen-hungarian
 * pdflatex example_pu.tex: works with TeX Live 2005--2019 if the packages
