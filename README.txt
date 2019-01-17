@@ -121,4 +121,33 @@ How to install LaTeX on Debian Buster, with TeX Live 2019:
   hyphenation) work, run:
   sudo apt-get install texlive-latex-base texlive-lang-european
 
+Compatibility with TeX Live:
+
+* The hyphen-hungarian TeX Live package is not needed by uni8.sty, but it is
+  needed by example_*.tex.
+* TeX Live 2010 tmlgr doesn't work with Perl 5.24 (errors in TLWinGoo.pm).
+* TeX Live 2011--2014 produces incorrect results for `lualatex example_pu.tex':
+  can't hyphenate bő-bő-... It's strange that loadhyph-hu.tex exists and it's
+  mentioned in language.dat.lua, but Babel can't find or load it.
+  (language.dat.lua is loaded by luababel.def.) If we could solve this loading
+  problem, maybe that would be enough.
+  $ tlmgr install scheme-basic luainputenc luatexbase lm hyphen-hungarian
+* Tex Live 2015--2019: Both pdflatex and lualatex work after this:
+  $ tlmgr install scheme-basic luainputenc luatexbase lm ctablestack hyphen-hungarian
+* pdflatex example_pu.tex: works with TeX Live 2005--2019 if the packages
+  lm (Latin Modern) and hyphen-hungarian are installed. Tested with TeX Live
+  2005, 2017, 2018 and 2019. (Earlier releases of TeX live may also work,
+  but they may not have the lm package available.)
+* lualatex example_pu.tex: works with TeX Live 2017--2019.
+
+Old TeX Live download links:
+
+* TeX Live 2005:
+  ftp://ftp.tug.org/texlive/historic/2005/texlive2005-inst-20051102.iso.bz2
+  http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2005/texlive2005-inst-20051102.iso.bz2
+* TeX Live 2006: There was no such release.
+* TeX Live 2007:
+  ftp://ftp.tug.org/texlive/historic/2007/texlive2007-live-20070212.iso.bz2
+  http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2007/texlive2007-live-20070212.iso.bz2
+
 __END__
