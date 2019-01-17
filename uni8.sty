@@ -192,6 +192,23 @@
   % hyph-hu.ec.tex rather than hyph-hu.tex in lualatex.
   %
   % This magic is based on https://tex.stackexchange.com/a/469909/820
+  %
+  % Without this magic, lualatex, [inputenc=utf8] would have incorrect
+  % hyphenation because of the way loadhyph-hu.tex detects whether
+  % conv-utf8-ec.tex should be loaded, and \usepackage[utf8]{luainputenc} is
+  % treated specially: differently from other encodings.
+  %
+  % Alternatively to the \let\kanjiskip\hsize hack, we could set up active
+  % characters to convert from Unicde to T1 like this below, just for the
+  % scope of \RequirePackage{babel}, especially for loadhyph-hu.tex:
+  %
+  %  \catcode`á=13 \begingroup\lccode`~=`á\lowercase{\endgroup\edef~}{\string^^e1}
+  %  \catcode`ő=13 \begingroup\lccode`~=`ő\lowercase{\endgroup\edef~}{\string^^ae}
+  %
+  % However, that doesn't work, because \bbl@luapatterns in luababel.def
+  % resets catcode of ő to 12 before the `\input #1' call to
+  % loadhyph-hu.tex. Also we'd need to change the catcodes and definitions back
+  % after \RequirePackage{babel}.
   \let\kanjiskip\hsize
   % Without loading babel, hyphenation \language macros such as \l@english and
   % \l@hungarian wouldn't be defined in lualatex.
