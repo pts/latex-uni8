@@ -136,10 +136,54 @@
   \normalfont\selectfont
 \else  % [fontspec] is not selected: use T1 font encoding.
   \ifnum0\ifx\luatexversion\@undefined1\fi\ifx\luatexversion\relax1\fi>0
+    \def\@univ@fix@topatterns{}
     % luainputenc.sty would also work, but we don't want to depend on it, to
     % remain compatible with earlier versions of pdflatex.
     \expandafter\RequirePackage\expandafter[\@univ@inputenc]{inputenc}
   \else
+    \begingroup  % To undef temporary \L and \P definitions.
+    \def\L#1{\expandafter\@gobble\string#1}% Useful for escaping.
+    % \P is a substitution table: a concatenation of XY characters pairs,
+    % where X is a Unicode character, and Y is the corresponding code point
+    % in T1 encoding. In this source file both X and Y are UTF-8 encoding.
+    % When lualatex executes \def\P{...}, both X and and Y will be added to
+    % \P as a character token (after UTF-8 decoding). Character values of
+    % X are at least 128, character values of Y are between 128 and 255.
+    %
+    % Define this this before importing luainputenc so we will get a single
+    % token per character, passed as UTF-8 bytes to \directlua.
+    \def\P{Ă Ą¡Ć¢Č£Ď¤Ě¥Ę¦Ğ§Ĺ¨Ľ©ŁªŃ«Ň¬Ŋ­Ő®Ŕ¯Ř°Ś±Š²Ş³Ť´ŢµŰ¶Ů·Ÿ¸Ź¹ŽºŻ»Ĳ¼İ½ÀàÁáÂâÃ%
+      ãÄäÅåÆæÇçÈèÉéÊêËëÌìÍíÎîÏïÐðĐðÑñÒòÓóÔôÕõÖöŒ÷ØøÙùÚúÛûÜüÝýÞþẞÿđă ą¡ć¢č£%
+      ď¤ě¥ę¦ğ§ĺ¨ľ©łªń«ň¬ŋ­ő®ŕ¯ř°ś±š²ş³ť´ţµű¶ů·ÿ¸ź¹žºż»ĳ¼ààááââããääååææççèèééêê%
+      ëëììííîîïïððññòòóóôôõõööœ÷øøùùúúûûüüýýþþßÿ}%
+    % This defines Lua code which converts hyphenation patterns of all
+    % languages from Unicode (UTF-8) to T1 encoding. We need this conversion
+    % because hyphenation patterns need to be in font encoding, which is T1
+    % in our case.
+    \edef\P{\noexpand\directlua{%
+      local r = {}
+      local n = 0
+      % Lua string pattern which matches a Unicode character encoded as
+      % UTF-8. Using \DDD (decimal) because Lua 5.1 used in lualatex in
+      % TeX Live 2010 has \DDD but not \xHH.
+      local u = '[\L\\192-\L\\253][\L\\128-\L\\191]+', p, k
+      for p in string.gmatch('\expandafter\strip@prefix\meaning\P', u) do
+        if n \L\% 2 == 0 then k = p else r[k] = p end
+        n = n + 1
+      end
+      if n \L\~= 250 then error('bad t1pat count: ' .. n) end
+      for n=0,\noexpand\the\noexpand\last@language+0 do
+        local l = lang.new(n)
+        p = lang.patterns(l)
+        if p then
+          texio.write(' [t1fix:' .. n .. '] ') % TODO(pts): No line breaks.
+          lang.clear_patterns(l)
+          lang.patterns(l, p:gsub(u, function (s) return r[s] or '?' end))
+        end
+      end
+      texio.write(' [/t1fix] ')}}
+    \expandafter\endgroup\expandafter\def\expandafter\@univ@fix@topatterns
+      \expandafter{\P}
     % Needed for ő and ű in non-fontspec fonts.
     \expandafter\RequirePackage\expandafter[\@univ@inputenc]{luainputenc}
   \fi
@@ -195,32 +239,56 @@
   \@tempcnta224 \loop\ifnum\@tempcnta<256
     \lccode\@tempcnta\@tempcnta \advance\@tempcnta1 \repeat
 
-  % Make loadhyph-hu.tex loaded by babel.sty in TeX Live 2019 load
-  % hyph-hu.ec.tex rather than hyph-hu.tex in lualatex.
-  %
-  % This magic is based on https://tex.stackexchange.com/a/469909/820
-  %
-  % Without this magic, lualatex, [inputenc=utf8] would have incorrect
-  % hyphenation because of the way loadhyph-hu.tex detects whether
-  % conv-utf8-ec.tex should be loaded, and \usepackage[utf8]{luainputenc} is
-  % treated specially: differently from other encodings.
-  %
-  % Alternatively to the \let\kanjiskip\hsize hack, we could set up active
-  % characters to convert from Unicde to T1 like this below, just for the
-  % scope of \RequirePackage{babel}, especially for loadhyph-hu.tex:
-  %
-  %  \catcode`á=13 \begingroup\lccode`~=`á\lowercase{\endgroup\edef~}{\string^^e1}
-  %  \catcode`ő=13 \begingroup\lccode`~=`ő\lowercase{\endgroup\edef~}{\string^^ae}
-  %
-  % However, that doesn't work, because \bbl@luapatterns in luababel.def
-  % resets catcode of ő to 12 before the `\input #1' call to
-  % loadhyph-hu.tex. Also we'd need to change the catcodes and definitions back
-  % after \RequirePackage{babel}.
-  \let\kanjiskip\hsize
-  % Without loading babel, hyphenation \language macros such as \l@english and
-  % \l@hungarian wouldn't be defined in lualatex.
-  \RequirePackage{babel}
-  \let\kanjkiskip\@undefined  % Undo our hack above.
+  \ifnum0\ifx\luatexversion\@undefined1\fi\ifx\luatexversion\relax1\fi>0
+    % For latex and pdflatex, just load babel without magic hacks for
+    % hyphanation pattern encoding.
+    \RequirePackage{babel}
+  \else\ifnum\last@language=\z@  % \last@language is defined even in tetex1.
+    % Hyphanation patterns will be loaded new this way: we load babel.sty,
+    % which loads luababel.def, which loads language.dat and then
+    % loadhyph-hu.tex, which loads either hyph-hu.tex or hyph-hu.ec.tex.
+    % We want hyph-hu.ec.tex (because that contains the hyphenation patterns
+    % in T1 encoding), and we get this by defining \kanjiskip, because
+    % loadhyph-hu.tex decides based on that. This \kanjiskip trick was
+    % tested in TeX Live 2015--2019 (babel.sty >= 3.9q).
+    %
+    % This magic is based on https://tex.stackexchange.com/a/469909/820
+    %
+    % Without this magic, lualatex, [inputenc=utf8] would have incorrect
+    % hyphenation because of the way loadhyph-hu.tex detects whether
+    % conv-utf8-ec.tex should be loaded, and \usepackage[utf8]{luainputenc} is
+    % treated specially: differently from other encodings.
+    %
+    % Alternatively to the \let\kanjiskip\hsize hack, we could set up active
+    % characters to convert from Unicde to T1 like this below, just for the
+    % scope of \RequirePackage{babel}, especially for loadhyph-hu.tex:
+    %
+    %  \catcode`á=13 \begingroup\lccode`~=`á\lowercase{\endgroup\edef~}{\string^^e1}
+    %  \catcode`ő=13 \begingroup\lccode`~=`ő\lowercase{\endgroup\edef~}{\string^^ae}
+    %
+    % However, that doesn't work, because \bbl@luapatterns in luababel.def
+    % resets catcode of ő to 12 before the `\input #1' call to
+    % loadhyph-hu.tex. Also we'd need to change the catcodes and definitions back
+    % after \RequirePackage{babel}.
+    \let\@univ@old@kanjiskip\kanjiskip
+    \let\kanjiskip\hsize
+    % Without loading babel, hyphenation \language macros such as \l@english and
+    % \l@hungarian wouldn't be defined in lualatex.
+    \RequirePackage{babel}
+    %\ifnum0\ifx\bbl@luapatterns\@undefined1\fi\ifx\bbl@luapatterns\relax1\fi>0 \else
+    %  \PackageWarningNoLine{uni8}{\string\bbl@luapatterns\space is missing}\fi
+    \let\kanjkiskip\@univ@old@kanjiskip  % Undo our hack above.
+    \let\@univ@old@kanjiskip\@undefined
+    \bbbb
+  \else
+    % Older versions of Babel (e.g. babel.sty <= 3.9l) load hyphenation
+    % patterns at format generation time. It's too late to load them with
+    % the proper encoding, so we use Lua code in \@univ@fix@topatterns to
+    % fix the encoding of the already loaded patterns.
+    \RequirePackage{babel}
+    \@univ@fix@topatterns
+  \fi\fi
+  \let\@univ@fix@topatterns\relax  % Save memory.
 \fi
 
 % Override magyar.ldf loaded by babel.sty to prevent useless warning about

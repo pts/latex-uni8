@@ -123,27 +123,29 @@ How to install LaTeX on Debian Buster, with TeX Live 2019:
 
 Compatibility with TeX Live:
 
-* The hyphen-hungarian and babel-hungarian TeX Live packages are not needed
-  by uni8.sty, but it is needed by example_*.tex.
-* TeX Live 2010--2014 produces incorrect results for `lualatex example_pu.tex':
-  can't hyphenate bő-bő-... .
+* FYI The hyphen-hungarian and babel-hungarian TeX Live packages are not
+  needed by uni8.sty, but it is needed by example_*.tex.
+* TeX Live 2004 and earlier: It wasn't tried.
+* TeX Live 2005--2009: pdflatex works after this:
+  $ tlmgr install scheme-basic lm hyphen-hungarian babel-hungarian
+  lualatex wasn't tried, it may work.
+* Tex Live 2010--2014: Both pdflatex and lualatex work after this:
   $ tlmgr install scheme-basic luainputenc luatexbase lm hyphen-hungarian babel-hungarian
-  The reason why it doesn't work is that before TeX Live 2015 luababel.def
-  didn't have \bbl@luapatterns, which contained the \input of
-  loadhyph-hu.tex, and the hyphenation \patterns were set up at format
-  creation time, thus by the time uni8.sty is loaded it's too late to set up
-  \patterns in a different font encoding (i.e. T1 instead of UTF-8).
-  A possible fix in the future could be adding Lua code to convert
-  lang.patterns (see http://www.luatex.org/svn/trunk/manual/luatex.pdf) from
-  UTF-8 to T1: read patterns with lang.patterns, then call
-  lang.clear_patterns, then call lang.patterns with the T1-encoded patterns.
+  Only lualatex needs luainputenc and luatexbase.
 * Tex Live 2015--2019: Both pdflatex and lualatex work after this:
   $ tlmgr install scheme-basic luainputenc luatexbase lm ctablestack hyphen-hungarian babel-hungarian
-* pdflatex example_pu.tex: works with TeX Live 2005--2019 if the packages
-  lm (Latin Modern), hyphen-hungarian and babel-hungarian are installed.
-  Tested with TeX Live 2005, 2017, 2018 and 2019. (Earlier releases of TeX
-  live may also work, but they may not have the lm package available.)
-* lualatex example_pu.tex: works with TeX Live 2017--2019.
+  Only lualatex needs luainputenc, luatexbase and ctablestack.
+
+Compatibility with teTeX:
+
+* teTeX 0.x: It wasn't tried.
+* teteX 1--2: It doesn't have \usepackage[utf8]{inputenc}, but the
+  non-Unicode source files (e.g. example_pl.tex) work with pdflatex.
+  lualatex wasn't tried, probably it doesn't work.
+  In teTeX 1, Hungarian hyphenation patterns have to be enabled first
+  by regenerating the format file.
+* teTeX 3: pdflatex works if the lmodern (Latin Modern) fonts are installed.
+  lualatex wasn't tried, probably it doesn't work.
 
 Old TeX Live download links:
 
